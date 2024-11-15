@@ -1,0 +1,154 @@
+﻿@model IEnumerable<KalenderApp.Models.Event>
+
+@{
+    ViewData["Title"] = "Kalender";
+}
+
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header style="background-color: #333; padding: 10px; color: #fff; font-family: Arial, sans-serif;">
+        <nav style="display: flex; justify-content: center; gap: 20px;">
+            <a href="/Home/Index" style="color: #fff; text-decoration: none; font-weight: bold;">Avaleht</a> |
+            <a href="/Event/Index" style="color: #fff; text-decoration: none; font-weight: bold;">Minu sündmused</a> |
+            <a href="/Account/Login" style="color: #fff; text-decoration: none; font-weight: bold;">Logi sisse</a> |
+            <a href="/Account/Register" style="color: #fff; text-decoration: none; font-weight: bold;">Registreeru</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2 class="title">Minu sündmused</h2>
+        <a href="/Event/Create" class="btn btn-success create-btn">Loo uus sündmus</a>
+
+        <table class="event-table">
+            <thead>
+                <tr>
+                    <th>Pealkiri</th>
+                    <th>Kirjeldus</th>
+                    <th>Algus</th>
+                    <th>Lõpp</th>
+                    <th>Kategooria</th>
+                    <th>Toimingud</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var evnt in Model)
+
+                {
+                    <tr>
+                        <td>@evnt.Title</td>
+                        <td>@evnt.Description</td>
+                        <td>@evnt.StartDateTime</td>
+                        <td>@evnt.EndDateTime</td>
+                        <td>@evnt.Category?.Name</td>
+                        <td>
+                            <a href="/Event/Edit/@evnt.Id" class="btn btn-warning btn-sm">Muuda</a>
+                            <a href="/Event/Delete/@evnt.Id" class="btn btn-danger btn-sm">Kustuta</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Styles -->
+    <style>
+        /* Container Styling */
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* Title Styling */
+        .title {
+            text-align: center;
+            color: #333;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Button Styling */
+        .create-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+            .create-btn:hover {
+                background-color: #218838;
+            }
+
+        /* Table Styling */
+        .event-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 1px solid #ddd;
+        }
+
+            .event-table th, .event-table td {
+                padding: 15px;
+                border: 1px solid #ddd;
+                text-align: left;
+            }
+
+            .event-table th {
+                background-color: #f8f9fa;
+                color: #495057;
+            }
+
+            .event-table td {
+                background-color: #fff;
+                color: #495057;
+            }
+
+            .event-table tr:hover {
+                background-color: #f1f1f1;
+            }
+
+        /* Action Button Styling */
+        .btn-warning, .btn-danger {
+            padding: 6px 12px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-right: 5px;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+        }
+
+            .btn-warning:hover {
+                background-color: #e0a800;
+            }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+            .btn-danger:hover {
+                background-color: #c82333;
+            }
+    </style>
+</body>
+</html>

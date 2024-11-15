@@ -1,0 +1,57 @@
+﻿@model KalenderApp.Models.Event
+
+@{
+    ViewData["Title"] = "Kustuta Sündmus";
+}
+
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Kustuta Sündmus</h2>
+        <p>Kas olete kindel, et soovite kustutada sündmuse "<strong>@Model.Title</strong>"?</p>
+
+        <form asp-action="DeleteConfirmed" method="post">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn-danger">Kustuta</button>
+            <a href="/Event/Index" class="btn-secondary">Tagasi</a>
+        </form>
+    </div>
+</body>
+</html>

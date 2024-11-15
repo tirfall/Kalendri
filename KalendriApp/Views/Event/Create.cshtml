@@ -1,0 +1,176 @@
+﻿@model KalenderApp.Models.Event
+
+@{
+    ViewData["Title"] = "Loo sündmus";
+}
+
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        /* Reset and General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            width: 100%;
+            max-width: 900px;
+            background-color: #ffffff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+            header a {
+                color: #0077b6;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 1rem;
+                padding: 8px 12px;
+                border-radius: 4px;
+                transition: background-color 0.2s ease;
+            }
+
+                header a:hover {
+                    background-color: #caf0f8;
+                }
+
+        /* Container Styles */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 30px 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #0096c7;
+            margin-bottom: 20px;
+        }
+
+        /* Form and Input Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: #0077b6;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+    </style>
+</head>
+<body>
+
+    
+
+    <div class="container">
+        <h2>@ViewData["Title"]</h2>
+        <form asp-action="Create" method="post">
+            <div class="form-group">
+                <label for="Title">Pealkiri</label>
+                <input type="text" name="Title" placeholder="Sisesta sündmuse pealkiri" required />
+            </div>
+            <div class="form-group">
+                <label for="Description">Kirjeldus</label>
+                <input type="text" name="Description" placeholder="Sisesta sündmuse kirjeldus" />
+            </div>
+            <div class="form-group">
+                <label for="StartDateTime">Algus</label>
+                <input type="datetime-local" name="StartDateTime" required />
+            </div>
+            <div class="form-group">
+                <label for="EndDateTime">Lõpp</label>
+                <input type="datetime-local" name="EndDateTime" />
+            </div>
+            <div class="form-group">
+                <label for="Recurrence">Kordus</label>
+                <select name="Recurrence">
+                    <option value="none">Ei kordu</option>
+                    <option value="daily">Igapäevane</option>
+                    <option value="weekly">Iganädalane</option>
+                    <option value="monthly">Igakuine</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="CategoryId">Kategooria</label>
+                <select name="CategoryId" required>
+                    <option value="1">Töö</option>
+                    <option value="2">Isiklik</option>
+                    <option value="3">Pere</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Timezone">Ajatsoon</label>
+                <input type="text" name="Timezone" value="Europe/Tallinn" required />
+            </div>
+            <div class="form-group">
+                <label for="Reminder">Meeldetuletus</label>
+                <select name="Reminder">
+                    <option value="none">Ei ole</option>
+                    <option value="email">E-post</option>
+                    <option value="notification">Teavitus</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary">Loo sündmus</button>
+        </form>
+    </div>
+
+</body>
+</html>

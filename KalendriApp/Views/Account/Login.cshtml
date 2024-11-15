@@ -1,0 +1,171 @@
+﻿@{
+    ViewData["Title"] = "Logi sisse";
+}
+
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logi sisse - Kalendriäpp</title>
+    <style>
+        /* General Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9f4fc;
+            color: #444;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            width: 100%;
+            max-width: 900px;
+            background-color: #0077b6;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            color: #ffffff;
+        }
+
+            header a {
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 1rem;
+                padding: 8px 12px;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+            }
+
+                header a:hover {
+                    background-color: #005f73;
+                }
+
+        /* Title Styling */
+        .header {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0077b6;
+            margin-top: 20px;
+        }
+
+        /* Container Styles */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #0077b6;
+            margin-bottom: 20px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+            display: block;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        /* Button Styles */
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: #0077b6;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: #023e8a;
+            }
+
+        /* Error Message Styles */
+        .alert {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/Home/Index">Avaleht</a>
+        <a href="/Event/Index">Minu sündmused</a>
+        <a href="/Account/Login">Logi sisse</a>
+        <a href="/Account/Register">Registreeru</a>
+    </header>
+
+    <div class="header">Kalendriäpp</div>
+
+    <div class="container">
+        <h2>Logi sisse</h2>
+        <form asp-action="Login" method="post">
+            <div class="form-group">
+                <label for="email">E-post</label>
+                <input name="email" type="email" placeholder="Sisesta oma e-post" required />
+            </div>
+            <div class="form-group">
+                <label for="password">Parool</label>
+                <input name="password" type="password" placeholder="Sisesta oma parool" required />
+            </div>
+            <button type="submit" class="btn-primary">Logi sisse</button>
+        </form>
+
+        @if (ViewBag.ErrorMessage != null)
+
+        {
+            <div class="alert">@ViewBag.ErrorMessage</div>
+        }
+    </div>
+
+</body>
+</html>

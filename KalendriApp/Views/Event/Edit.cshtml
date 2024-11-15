@@ -1,0 +1,155 @@
+﻿@model KalenderApp.Models.Event
+
+@{
+    ViewData["Title"] = "Muuda Sündmust";
+}
+
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        /* General Container and Body Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 30px 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        /* Form and Input Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        /* Error Message Styling */
+        .text-danger {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>@ViewData["Title"]</h2>
+        <form asp-action="Edit" method="post">
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="form-group">
+                <label for="Title">Pealkiri</label>
+                <input asp-for="Title" class="form-control" required />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Description">Kirjeldus</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="StartDateTime">Alguskuupäev ja kellaaeg</label>
+                <input asp-for="StartDateTime" type="datetime-local" class="form-control" required />
+                <span asp-validation-for="StartDateTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="EndDateTime">Lõppkuupäev ja kellaaeg</label>
+                <input asp-for="EndDateTime" type="datetime-local" class="form-control" />
+                <span asp-validation-for="EndDateTime" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Recurrence">Kordus</label>
+                <select asp-for="Recurrence" class="form-control">
+                    <option value="none">Ei kordu</option>
+                    <option value="daily">Igapäevane</option>
+                    <option value="weekly">Iganädalane</option>
+                    <option value="monthly">Igakuine</option>
+                </select>
+                <span asp-validation-for="Recurrence" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="CategoryId">Kategooria</label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.Categories" required></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Timezone">Ajatsoon</label>
+                <input asp-for="Timezone" class="form-control" required />
+                <span asp-validation-for="Timezone" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="Reminder">Meeldetuletus</label>
+                <select asp-for="Reminder" class="form-control">
+                    <option value="none">Ei ole</option>
+                    <option value="email">E-post</option>
+                    <option value="notification">Teavitus</option>
+                </select>
+                <span asp-validation-for="Reminder" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn-primary">Salvesta</button>
+        </form>
+    </div>
+</body>
+</html>
