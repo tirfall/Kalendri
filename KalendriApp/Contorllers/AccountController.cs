@@ -41,7 +41,7 @@ namespace KalenderApp.Controllers
             }
 
             // Incorrect credentials
-            ViewBag.ErrorMessage = "Неверный email или пароль.";
+            ViewBag.ErrorMessage = "Vale email või parool.";
             return View();
         }
 
@@ -54,7 +54,7 @@ namespace KalenderApp.Controllers
         // POST: /Account/Register
         [HttpPost]
         // POST: /Account/Register
-      
+
         public async Task<IActionResult> Register(User newUser)
         {
             if (!ModelState.IsValid)
@@ -63,10 +63,10 @@ namespace KalenderApp.Controllers
                 return View(newUser);
             }
 
-            // Устанавливаем таймзону по умолчанию, если она не была указана
+            // Määrake vaikeajavöönd, kui seda pole määratud
             newUser.Timezone ??= "Europe/Tallinn";
 
-            // Проверка наличия пользователя с таким же email
+            // Kontrollitakse, kas on olemas sama e-posti aadressiga kasutaja
             var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == newUser.Email);
             if (existingUser != null)
             {
@@ -74,14 +74,30 @@ namespace KalenderApp.Controllers
                 return View(newUser);
             }
 
-            // Хешируем пароль перед сохранением
+            // Kontrollime parooli tugevust
+            if (!IsValidPassword(newUser.Password))
+            {
+                ViewBag.ErrorMessage = "Parool peab olema vähemalt 8 tähemärki pikk, sisaldama vähemalt ühte numbrit, ühte väikest ja ühte suurt tähte.";
+                return View(newUser);
+            }
+
+            // Räsime parooli enne salvestamist
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
 
-            // Устанавливаем сессию для нового пользователя
-            HttpContext.Session.SetInt32("UserId", newUser.Id);
+            // Seansi loomine uuele kasutajale
+            HttpContext.Session.SetInt32("User Id", newUser.Id);
             return RedirectToAction("Index", "Event");
+        }
+
+        private bool IsValidPassword(string password)
+        {
+            // Parooli kontrollimiseks kasutame regulaaravaldisi
+            return password.Length >= 8 &&
+                   password.Any(char.IsDigit) && // vähemalt üks number
+                   password.Any(char.IsLower) && // vähemalt üks väike täht
+                   password.Any(char.IsUpper);   // vähemalt üks suur täht
         }
 
 

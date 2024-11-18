@@ -29,7 +29,7 @@ namespace KalenderApp.Models
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public string Timezone { get; set; } // Исправление: добавлено свойство Timezone
+        public string Timezone { get; set; } // Lisatud Timezone
 
         public string Reminder { get; set; }
     }

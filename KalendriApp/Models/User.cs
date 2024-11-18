@@ -16,6 +16,6 @@ namespace KalenderApp.Models
         [Required]
         public string Password { get; set; }
 
-        public string Timezone { get; set; } // Исправление: добавлено свойство Timezone
+        public string Timezone { get; set; } // Lisatud Timezone
     }
 }
