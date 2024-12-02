@@ -21,7 +21,7 @@ namespace KalenderApp.Models
 
         public string Recurrence { get; set; }
 
-        [ForeignKey("Category")]
+        [ForeignKey("Categories")]
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
