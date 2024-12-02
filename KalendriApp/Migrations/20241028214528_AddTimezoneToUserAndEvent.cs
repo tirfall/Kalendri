@@ -15,16 +15,16 @@ namespace KalendriApp.Migrations
         {
             migrationBuilder.RenameColumn(
                 name: "TimeZone",
-                table: "Users",
+                table: "User",
                 newName: "Timezone");
 
             migrationBuilder.RenameColumn(
                 name: "TimeZone",
-                table: "Events",
+                table: "Event",
                 newName: "Timezone");
 
             migrationBuilder.InsertData(
-                table: "Categories",
+                table: "Category",
                 columns: new[] { "Id", "Color", "Name" },
                 values: new object[,]
                 {
@@ -34,7 +34,7 @@ namespace KalendriApp.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
+                table: "User",
                 columns: new[] { "Id", "Email", "Name", "Password", "Timezone" },
                 values: new object[,]
                 {
@@ -43,7 +43,7 @@ namespace KalendriApp.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Events",
+                table: "Event",
                 columns: new[] { "Id", "CategoryId", "Description", "EndDateTime", "Recurrence", "Reminder", "StartDateTime", "Timezone", "Title", "UserId" },
                 values: new object[,]
                 {
@@ -56,48 +56,48 @@ namespace KalendriApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
-                table: "Categories",
+                table: "Category",
                 keyColumn: "Id",
                 keyValue: 3);
 
             migrationBuilder.DeleteData(
-                table: "Events",
+                table: "Event",
                 keyColumn: "Id",
                 keyValue: 1);
 
             migrationBuilder.DeleteData(
-                table: "Events",
+                table: "Event",
                 keyColumn: "Id",
                 keyValue: 2);
 
             migrationBuilder.DeleteData(
-                table: "Categories",
+                table: "Category",
                 keyColumn: "Id",
                 keyValue: 1);
 
             migrationBuilder.DeleteData(
-                table: "Categories",
+                table: "Category",
                 keyColumn: "Id",
                 keyValue: 2);
 
             migrationBuilder.DeleteData(
-                table: "Users",
+                table: "User",
                 keyColumn: "Id",
                 keyValue: 1);
 
             migrationBuilder.DeleteData(
-                table: "Users",
+                table: "User",
                 keyColumn: "Id",
                 keyValue: 2);
 
             migrationBuilder.RenameColumn(
                 name: "Timezone",
-                table: "Users",
+                table: "User",
                 newName: "TimeZone");
 
             migrationBuilder.RenameColumn(
                 name: "Timezone",
-                table: "Events",
+                table: "Event",
                 newName: "TimeZone");
         }
     }

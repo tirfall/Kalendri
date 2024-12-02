@@ -43,7 +43,7 @@ namespace KalendriApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
 
                     b.HasData(
                         new
@@ -112,7 +112,7 @@ namespace KalendriApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Event");
 
                     b.HasData(
                         new
@@ -169,7 +169,7 @@ namespace KalendriApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
 
                     b.HasData(
                         new

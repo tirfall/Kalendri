@@ -1158,7 +1158,7 @@ $.extend( $.validator, {
 			} );
 		},
 
-		// Cleans up all forms and elements, removes validator-specific events
+		// Cleans up all forms and elements, removes validator-specific Event
 		destroy: function() {
 			this.resetForm();
 

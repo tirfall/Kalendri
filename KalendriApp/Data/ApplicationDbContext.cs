@@ -11,22 +11,22 @@ namespace KalenderApp.Data
         {
         }
 
-        public DbSet<Event> Events { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Event> Event { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Начальное заполнение для таблицы Categories
+            // Начальное заполнение для таблицы Category
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Работа", Color = "#FF0000" },
                 new Category { Id = 2, Name = "Личное", Color = "#00FF00" },
                 new Category { Id = 3, Name = "Семья", Color = "#0000FF" }
             );
 
-            // Начальное заполнение для таблицы Users с зашифрованными паролями
+            // Начальное заполнение для таблицы User с зашифрованными паролями
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -46,7 +46,7 @@ namespace KalenderApp.Data
                 }
             );
 
-            // Начальное заполнение для таблицы Events
+            // Начальное заполнение для таблицы Event
             modelBuilder.Entity<Event>().HasData(
                 new Event
                 {

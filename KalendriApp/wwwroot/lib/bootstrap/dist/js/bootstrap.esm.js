@@ -331,15 +331,15 @@ const getNextActiveElement = (list, activeElement, shouldGetNext, isCycleAllowed
 const namespaceRegex = /[^.]*(?=\..*)\.|.*/;
 const stripNameRegex = /\..*/;
 const stripUidRegex = /::\d+$/;
-const eventRegistry = {}; // Events storage
+const eventRegistry = {}; // Event storage
 
 let uidEvent = 1;
-const customEvents = {
+const customEvent = {
   mouseenter: 'mouseover',
   mouseleave: 'mouseout'
 };
-const customEventsRegex = /^(mouseenter|mouseleave)/i;
-const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
+const customEventRegex = /^(mouseenter|mouseleave)/i;
+const nativeEvent = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
 /**
  * ------------------------------------------------------------------------
  * Private methods
@@ -395,11 +395,11 @@ function bootstrapDelegationHandler(element, selector, fn) {
   };
 }
 
-function findHandler(events, handler, delegationSelector = null) {
-  const uidEventList = Object.keys(events);
+function findHandler(Event, handler, delegationSelector = null) {
+  const uidEventList = Object.keys(Event);
 
   for (let i = 0, len = uidEventList.length; i < len; i++) {
-    const event = events[uidEventList[i]];
+    const event = Event[uidEventList[i]];
 
     if (event.originalHandler === handler && event.delegationSelector === delegationSelector) {
       return event;
@@ -413,7 +413,7 @@ function normalizeParams(originalTypeEvent, handler, delegationFn) {
   const delegation = typeof handler === 'string';
   const originalHandler = delegation ? delegationFn : handler;
   let typeEvent = getTypeEvent(originalTypeEvent);
-  const isNative = nativeEvents.has(typeEvent);
+  const isNative = nativeEvent.has(typeEvent);
 
   if (!isNative) {
     typeEvent = originalTypeEvent;
@@ -431,10 +431,10 @@ function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
     handler = delegationFn;
     delegationFn = null;
   } // in case of mouseenter or mouseleave wrap the handler within a function that checks for its DOM position
-  // this prevents the handler from being dispatched the same way as mouseover or mouseout does
+  // this prEvent the handler from being dispatched the same way as mouseover or mouseout does
 
 
-  if (customEventsRegex.test(originalTypeEvent)) {
+  if (customEventRegex.test(originalTypeEvent)) {
     const wrapFn = fn => {
       return function (event) {
         if (!event.relatedTarget || event.relatedTarget !== event.delegateTarget && !event.delegateTarget.contains(event.relatedTarget)) {
@@ -451,8 +451,8 @@ function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
   }
 
   const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
-  const events = getEvent(element);
-  const handlers = events[typeEvent] || (events[typeEvent] = {});
+  const Event = getEvent(element);
+  const handlers = Event[typeEvent] || (Event[typeEvent] = {});
   const previousFn = findHandler(handlers, originalHandler, delegation ? handler : null);
 
   if (previousFn) {
@@ -470,31 +470,31 @@ function addHandler(element, originalTypeEvent, handler, delegationFn, oneOff) {
   element.addEventListener(typeEvent, fn, delegation);
 }
 
-function removeHandler(element, events, typeEvent, handler, delegationSelector) {
-  const fn = findHandler(events[typeEvent], handler, delegationSelector);
+function removeHandler(element, Event, typeEvent, handler, delegationSelector) {
+  const fn = findHandler(Event[typeEvent], handler, delegationSelector);
 
   if (!fn) {
     return;
   }
 
   element.removeEventListener(typeEvent, fn, Boolean(delegationSelector));
-  delete events[typeEvent][fn.uidEvent];
+  delete Event[typeEvent][fn.uidEvent];
 }
 
-function removeNamespacedHandlers(element, events, typeEvent, namespace) {
-  const storeElementEvent = events[typeEvent] || {};
+function removeNamespacedHandlers(element, Event, typeEvent, namespace) {
+  const storeElementEvent = Event[typeEvent] || {};
   Object.keys(storeElementEvent).forEach(handlerKey => {
     if (handlerKey.includes(namespace)) {
       const event = storeElementEvent[handlerKey];
-      removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
+      removeHandler(element, Event, typeEvent, event.originalHandler, event.delegationSelector);
     }
   });
 }
 
 function getTypeEvent(event) {
-  // allow to get the native events from namespaced events ('click.bs.button' --> 'click')
+  // allow to get the native Event from namespaced Event ('click.bs.button' --> 'click')
   event = event.replace(stripNameRegex, '');
-  return customEvents[event] || event;
+  return customEvent[event] || event;
 }
 
 const EventHandler = {
@@ -513,32 +513,32 @@ const EventHandler = {
 
     const [delegation, originalHandler, typeEvent] = normalizeParams(originalTypeEvent, handler, delegationFn);
     const inNamespace = typeEvent !== originalTypeEvent;
-    const events = getEvent(element);
+    const Event = getEvent(element);
     const isNamespace = originalTypeEvent.startsWith('.');
 
     if (typeof originalHandler !== 'undefined') {
       // Simplest case: handler is passed, remove that listener ONLY.
-      if (!events || !events[typeEvent]) {
+      if (!Event || !Event[typeEvent]) {
         return;
       }
 
-      removeHandler(element, events, typeEvent, originalHandler, delegation ? handler : null);
+      removeHandler(element, Event, typeEvent, originalHandler, delegation ? handler : null);
       return;
     }
 
     if (isNamespace) {
-      Object.keys(events).forEach(elementEvent => {
-        removeNamespacedHandlers(element, events, elementEvent, originalTypeEvent.slice(1));
+      Object.keys(Event).forEach(elementEvent => {
+        removeNamespacedHandlers(element, Event, elementEvent, originalTypeEvent.slice(1));
       });
     }
 
-    const storeElementEvent = events[typeEvent] || {};
+    const storeElementEvent = Event[typeEvent] || {};
     Object.keys(storeElementEvent).forEach(keyHandlers => {
       const handlerKey = keyHandlers.replace(stripUidRegex, '');
 
       if (!inNamespace || originalTypeEvent.includes(handlerKey)) {
         const event = storeElementEvent[keyHandlers];
-        removeHandler(element, events, typeEvent, event.originalHandler, event.delegationSelector);
+        removeHandler(element, Event, typeEvent, event.originalHandler, event.delegationSelector);
       }
     });
   },
@@ -551,7 +551,7 @@ const EventHandler = {
     const $ = getjQuery();
     const typeEvent = getTypeEvent(event);
     const inNamespace = event !== typeEvent;
-    const isNative = nativeEvents.has(typeEvent);
+    const isNative = nativeEvent.has(typeEvent);
     let jQueryEvent;
     let bubbles = true;
     let nativeDispatch = true;
@@ -567,7 +567,7 @@ const EventHandler = {
     }
 
     if (isNative) {
-      evt = document.createEvent('HTMLEvents');
+      evt = document.createEvent('HTMLEvent');
       evt.initEvent(typeEvent, bubbles, true);
     } else {
       evt = new CustomEvent(event, {
@@ -1073,7 +1073,7 @@ const EVENT_KEY$a = `.${DATA_KEY$a}`;
 const DATA_API_KEY$6 = '.data-api';
 const ARROW_LEFT_KEY = 'ArrowLeft';
 const ARROW_RIGHT_KEY = 'ArrowRight';
-const TOUCHEVENT_COMPAT_WAIT = 500; // Time for mouse compat events to fire after touch
+const TOUCHEVENT_COMPAT_WAIT = 500; // Time for mouse compat Event to fire after touch
 
 const SWIPE_THRESHOLD = 40;
 const Default$a = {
@@ -1304,12 +1304,12 @@ class Carousel extends BaseComponent {
 
       if (this._config.pause === 'hover') {
         // If it's a touch-enabled device, mouseenter/leave are fired as
-        // part of the mouse compatibility events on first tap - the carousel
+        // part of the mouse compatibility Event on first tap - the carousel
         // would stop cycling until user tapped out of it;
         // here, we listen for touchend, explicitly pause the carousel
         // (as if it's the second time we tap on it, mouseenter compat event
         // is NOT fired) and after a timeout (to allow for mouse compatibility
-        // events to fire) we explicitly restart cycling
+        // Event to fire) we explicitly restart cycling
         this.pause();
 
         if (this.touchTimeout) {
@@ -2287,7 +2287,7 @@ class Dropdown extends BaseComponent {
 
         if (composedPath.includes(context._element) || context._config.autoClose === 'inside' && !isMenuTarget || context._config.autoClose === 'outside' && isMenuTarget) {
           continue;
-        } // Tab navigation through the dropdown menu or events from contained inputs shouldn't close the menu
+        } // Tab navigation through the dropdown menu or Event from contained inputs shouldn't close the menu
 
 
         if (context._menu.contains(event.target) && (event.type === 'keyup' && event.key === TAB_KEY$1 || /input|select|option|textarea|form/i.test(event.target.tagName))) {
@@ -3853,7 +3853,7 @@ class Tooltip extends BaseComponent {
     if (!content && templateElement) {
       templateElement.remove();
       return;
-    } // we use append for html objects to maintain js events
+    } // we use append for html objects to maintain js Event
 
 
     this.setElementContent(templateElement, content);

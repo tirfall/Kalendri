@@ -25,12 +25,12 @@ namespace KalenderApp.Controllers
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return RedirectToAction("Login", "Account");
 
-            var events = await _context.Events
+            var Event = await _context.Event
                 .Include(e => e.Category)
                 .Where(e => e.UserId == userId)
                 .ToListAsync();
 
-            return View(events);
+            return View(Event);
         }
 
         // GET: /Event/Create
@@ -63,7 +63,7 @@ namespace KalenderApp.Controllers
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return RedirectToAction("Login", "Account");
 
-            var @event = await _context.Events.FindAsync(id);
+            var @event = await _context.Event.FindAsync(id);
             if (@event == null || @event.UserId != userId)
             {
                 return NotFound();
@@ -85,10 +85,10 @@ namespace KalenderApp.Controllers
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return RedirectToAction("Login", "Account");
 
-            var @event = await _context.Events.FindAsync(id);
+            var @event = await _context.Event.FindAsync(id);
             if (@event != null && @event.UserId == userId)
             {
-                _context.Events.Remove(@event);
+                _context.Event.Remove(@event);
                 await _context.SaveChangesAsync();
             }
 
@@ -102,7 +102,7 @@ namespace KalenderApp.Controllers
             var userId = HttpContext.Session.GetInt32("UserId");
             if (userId == null) return RedirectToAction("Login", "Account");
 
-            var @event = await _context.Events.FindAsync(id);
+            var @event = await _context.Event.FindAsync(id);
             if (@event == null || @event.UserId != userId)
             {
                 return NotFound();
@@ -114,7 +114,7 @@ namespace KalenderApp.Controllers
             Thread.CurrentThread.CurrentUICulture = newCulture;
             ViewBag.Language = lang;
 
-            ViewBag.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name");
+            ViewBag.Category = new SelectList(await _context.Category.ToListAsync(), "Id", "Name");
             return View(@event);
         }
 
@@ -136,7 +136,7 @@ namespace KalenderApp.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await _context.Events.AnyAsync(e => e.Id == @event.Id))
+                    if (!await _context.Event.AnyAsync(e => e.Id == @event.Id))
                     {
                         return NotFound();
                     }
@@ -148,7 +148,7 @@ namespace KalenderApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Categories = new SelectList(await _context.Categories.ToListAsync(), "Id", "Name");
+            ViewBag.Category = new SelectList(await _context.Category.ToListAsync(), "Id", "Name");
             return View(@event);
         }
     }

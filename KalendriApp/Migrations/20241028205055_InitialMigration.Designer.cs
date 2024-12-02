@@ -43,7 +43,7 @@ namespace KalendriApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("KalenderApp.Models.Event", b =>
@@ -92,7 +92,7 @@ namespace KalendriApp.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Event");
                 });
 
             modelBuilder.Entity("KalenderApp.Models.User", b =>
@@ -121,7 +121,7 @@ namespace KalendriApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("KalenderApp.Models.Event", b =>

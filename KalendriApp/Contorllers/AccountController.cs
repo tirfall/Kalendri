@@ -31,7 +31,7 @@ namespace KalenderApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.User.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
@@ -67,7 +67,7 @@ namespace KalenderApp.Controllers
             newUser.Timezone ??= "Europe/Tallinn";
 
             // Kontrollitakse, kas on olemas sama e-posti aadressiga kasutaja
-            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == newUser.Email);
+            var existingUser = await _context.User.FirstOrDefaultAsync(u => u.Email == newUser.Email);
             if (existingUser != null)
             {
                 ViewBag.ErrorMessage = "Kasutaja selle e-posti aadressiga on juba olemas.";
@@ -83,7 +83,7 @@ namespace KalenderApp.Controllers
 
             // Räsime parooli enne salvestamist
             newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
-            _context.Users.Add(newUser);
+            _context.User.Add(newUser);
             await _context.SaveChangesAsync();
 
             // Seansi loomine uuele kasutajale
